@@ -70,4 +70,92 @@ collab_editor/
 ├── manage.py
 └── requirements.txt
 
+```
+## ⚙️ Local Development Setup
+✅ Prerequisites
+Python 3.10+
+MySQL 8
+Git
+Virtualenv (recommended)
+
+## 💻 Installation Steps
+bash
+Copy
+Edit
+# 1. Clone the repository
+git clone https://github.com/yourusername/collab_editor.git
+cd collab_editor
+
+# 2. Create and activate a virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# 3. Install required packages
+pip install -r requirements.txt
+
+# 4. Configure MySQL in collab_editor/settings.py
+
+# 5. Apply database migrations
+python manage.py migrate
+
+# 6. Run the development server
+python manage.py runserver
+☁️ Deployment on AWS EC2 (Ubuntu)
+✅ EC2 Setup
+bash
+Copy
+Edit
+# SSH into EC2
+ssh ubuntu@your-ec2-ip
+
+# Install Python, MySQL, and Git
+sudo apt update
+sudo apt install python3 python3-pip python3-venv mysql-server git
+
+# Clone the repository
+git clone https://github.com/yourusername/collab_editor.git
+cd collab_editor
+
+# Set up virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure database settings in settings.py
+
+# Run migrations
+python manage.py migrate
+
+# Start the ASGI server using Daphne
+DJANGO_SETTINGS_MODULE=collab_editor.settings daphne -b 0.0.0.0 -p 8000 collab_editor.asgi:application
+✅ Make sure port 8000 is open in your EC2 security group.
+
+
+## 🔐 Security Checklist
+- ✅ Use Django's built-in authentication system
+- ✅ Move SECRET_KEY and DB credentials to .env file
+- ✅ Use a MySQL user with limited privileges
+- ✅ Sanitize document inputs to prevent XSS/SQLi
+- ✅ Add CSRF protection to all forms
+
+## 🧪 Future Enhancements
+- 📁 File uploads
+- ✍️ Markdown & Rich Text Editor (e.g., Quill.js, TinyMCE)
+- 💬 In-document chat system
+- 🌍 Multilingual support & grammar suggestions
+- 🔒 JWT authentication for API endpoints
+
+
+## 📦 Key Dependencies
+ini
+Copy
+Edit
+Django==5.2.4
+channels==4.1.0
+daphne==4.1.0
+mysqlclient==2.2.4
+(Full list available in requirements.txt)
+
 
