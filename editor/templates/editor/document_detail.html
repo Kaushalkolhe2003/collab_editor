@@ -1,0 +1,78 @@
+{% extends 'editor/base.html' %}
+{% block content %}
+
+<h2>{{ document.title }}</h2>
+<p>Last Updated: {{ document.updated_at|date:"F j, Y, g:i A" }}</p>
+
+<!-- 🔸 Show Add Collaborator Button (Owner Only) -->
+{% if user == document.owner %}
+    <a href="{% url 'add_collaborator' document.pk %}" class="btn btn-warning mb-3">Add Collaborator</a>
+{% endif %}
+
+<!-- 🔸 Show Collaborator List -->
+{% if document.collaborators.all %}
+    <h5>Collaborators:</h5>
+    <ul>
+        {% for collab in document.collaborators.all %}
+            <li>
+                {{ collab.user.get_full_name }} ({{ collab.role }})
+                {% if user == document.owner %}
+                    <form action="{% url 'remove_collaborator' document.pk collab.pk %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-danger">Remove</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<!-- 🔸 Document Editor or Read-Only View -->
+{% if can_edit %}
+    <a href="{% url 'document_edit' document.pk %}" class="btn btn-primary mb-3">Edit Metadata</a>
+
+    <textarea id="editor" class="form-control">{{ document.content }}</textarea>
+    <p id="typing-status" style="color: gray;"></p>
+
+    <script>
+        const socket = new WebSocket('ws://' + window.location.host + '/ws/editor/{{ document.id }}/');
+        const editor = document.getElementById('editor');
+        const typingStatus = document.getElementById('typing-status');
+
+        let typingTimer;
+
+        editor.addEventListener('input', () => {
+            // Send document content
+            socket.send(JSON.stringify({
+                'content': editor.value
+            }));
+
+            // Send typing notification
+            socket.send(JSON.stringify({
+                'typing': true
+            }));
+
+            // Clear typing message after 2 seconds
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                typingStatus.innerText = '';
+            }, 2000);
+        });
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'edit') {
+                editor.value = data.content;
+            } else if (data.type === 'typing') {
+                typingStatus.innerText = `${data.user} is typing...`;
+            }
+        };
+    </script>
+
+{% else %}
+    <hr>
+    <pre>{{ document.content }}</pre>
+{% endif %}
+
+{% endblock %}

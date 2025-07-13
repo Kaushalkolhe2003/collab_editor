@@ -1,0 +1,16 @@
+{% extends 'editor/base.html' %}
+
+{% block content %}
+  <h2>Your Documents</h2>
+  <a href="{% url 'document_create' %}">+ Create New Document</a>
+  <ul>
+    {% for doc in documents %}
+      <li>
+        <a href="{% url 'document_detail' doc.pk %}">{{ doc.title }}</a>
+        <small>Updated: {{ doc.updated_at }}</small>
+      </li>
+    {% empty %}
+      <li>No documents found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
