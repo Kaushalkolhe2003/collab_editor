@@ -4,13 +4,15 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.contrib.auth.models import User
-from .models import Document, Collaborator
+from .models import Document, Collaborator, DocumentVersion
+
 
 class DocumentConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.document_id = self.scope['url_route']['kwargs']['document_id']
         self.room_group_name = f'document_{self.document_id}'
         self.user = self.scope['user']
+        print(f"📡 WebSocket connection attempt by {self.scope['user']} for document {self.scope['url_route']['kwargs']['document_id']}")
 
         if self.user.is_authenticated and await self.user_has_access():
             await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -66,6 +68,17 @@ class DocumentConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_document_content(self, content):
+        print(f"Saving version for doc {self.document_id} by {self.user.username}")  # 🔍 Debug
         doc = Document.objects.get(pk=self.document_id)
+
+        # Save version before updating
+        DocumentVersion.objects.create(
+            document=doc,
+            content=doc.content,  # save old content
+            edited_by=self.user
+        )
+
+        # Save new content
         doc.content = content
         doc.save()
+

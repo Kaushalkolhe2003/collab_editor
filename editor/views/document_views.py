@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from ..forms import CollaboratorForm
-from ..models import Document, Collaborator
+from ..models import Document, Collaborator, DocumentVersion
 
 
 class DocumentListView(LoginRequiredMixin, ListView):
@@ -61,6 +61,19 @@ class DocumentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         doc = self.get_object()
         return doc.owner == self.request.user or doc.collaborators.filter(user=self.request.user, role='editor').exists()
+
+    def form_valid(self, form):
+        # Get the current document before update
+        old_document = self.get_object()
+
+        # Save a version BEFORE updating content
+        DocumentVersion.objects.create(
+            document=old_document,
+            content=old_document.content,
+            edited_by=self.request.user
+        )
+
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('document_detail', kwargs={'pk': self.object.pk})
