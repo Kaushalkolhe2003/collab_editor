@@ -1,28 +1,37 @@
-# Python
+# Byte-compiled / cache
 __pycache__/
 *.py[cod]
-*.env
-*.sqlite3
+*$py.class
+
+# Logs
 *.log
 
-# Django
-db.sqlite3
-/staticfiles/
-media/
+# Environment variables
 .env
+*.env
 
-# Virtual Environment
+# Django-specific
+db.sqlite3
+/media/
+staticfiles/
+
+# Virtual environment
 .venv/
+venv/
+ENV/
 
-# IDE
-.vscode/
-.idea/
-
-# OS
+# OS-specific
 .DS_Store
 Thumbs.db
+
+# IDE-specific
+.vscode/
+.idea/
 
 # PyCharm
 *.iml
 *.ipr
 *.iws
+
+# MySQL (if you accidentally export dumps)
+*.sql
