@@ -9,6 +9,11 @@
     <a href="{% url 'add_collaborator' document.pk %}" class="btn btn-warning mb-3">Add Collaborator</a>
 {% endif %}
 
+{% if user == document.owner %}
+    <a href="{% url 'document_versions' document.pk %}" class="btn btn-info mb-3">View Version History</a>
+{% endif %}
+
+
 <!-- 🔸 Show Collaborator List -->
 {% if document.collaborators.all %}
     <h5>Collaborators:</h5>

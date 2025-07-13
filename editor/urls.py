@@ -3,6 +3,7 @@ from .views import *
 from .views.auth_view import UserRegisterView, UserLoginView, UserLogoutView
 from .views.document_views import DocumentListView, DocumentCreateView, DocumentDetailView, DocumentUpdateView, \
     CollaboratorAddView, CollaboratorRemoveView
+from .views.version_views import DocumentVersionListView
 
 urlpatterns = [
     # User URLS
@@ -20,6 +21,10 @@ urlpatterns = [
     # Collab URLS
     path('documents/<int:pk>/add-collaborator/', CollaboratorAddView.as_view(), name='add_collaborator'),
     path('documents/<int:doc_pk>/remove-collaborator/<int:collab_pk>/', CollaboratorRemoveView.as_view(), name='remove_collaborator'),
+
+    # Versioning URLS
+    path('documents/<int:pk>/versions/', DocumentVersionListView.as_view(), name='document_versions'),
+
 
 
 ]
