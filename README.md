@@ -149,13 +149,13 @@ DJANGO_SETTINGS_MODULE=collab_editor.settings daphne -b 0.0.0.0 -p 8000 collab_e
 
 
 ## 📦 Key Dependencies
-ini
-Copy
-Edit
-Django==5.2.4
-channels==4.1.0
-daphne==4.1.0
-mysqlclient==2.2.4
-(Full list available in requirements.txt)
+- ini
+- Copy
+- Edit
+- Django==5.2.4
+- channels==4.1.0
+- daphne==4.1.0
+- mysqlclient==2.2.4
+- (Full list available in requirements.txt)
 
 
