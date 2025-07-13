@@ -72,16 +72,16 @@ collab_editor/
 
 ```
 ## ⚙️ Local Development Setup
-✅ Prerequisites
-Python 3.10+
-MySQL 8
-Git
-Virtualenv (recommended)
+- ✅ Prerequisites
+- Python 3.10+
+- MySQL 8
+- Git
+- Virtualenv (recommended)
 
 ## 💻 Installation Steps
-bash
-Copy
-Edit
+- bash
+- Copy
+- Edit
 # 1. Clone the repository
 git clone https://github.com/yourusername/collab_editor.git
 cd collab_editor
