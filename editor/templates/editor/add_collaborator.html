@@ -1,0 +1,12 @@
+{% extends 'editor/base.html' %}
+{% block content %}
+<h3>Add Collaborator to: {{ document.title }}</h3>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Add Collaborator</button>
+</form>
+
+<a href="{% url 'document_detail' document.pk %}" class="btn btn-secondary mt-3">Back to Document</a>
+{% endblock %}

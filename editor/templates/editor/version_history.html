@@ -1,0 +1,26 @@
+{% extends 'editor/base.html' %}
+{% block content %}
+<h3>Version History: {{ document.title }}</h3>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Version</th>
+            <th>Timestamp</th>
+            <th>Modified By</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for version in versions %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ version.timestamp|date:"d M Y H:i" }}</td>
+            <td>{{ version.user.username }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No versions available.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'document_detail' document.pk %}" class="btn btn-secondary">Back to Editor</a>
+{% endblock %}
